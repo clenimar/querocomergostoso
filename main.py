@@ -18,7 +18,7 @@ import webapp2
 
 class Project(webapp2.RequestHandler):
     def get(self):
-        self.response.write('aqui fica as coisas pra Dalton')
+        self.response.write('olar.')
 
 #o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
