@@ -16,15 +16,11 @@
 #
 import webapp2
 
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('olar')
-
 class Project(webapp2.RequestHandler):
     def get(self):
         self.response.write('aqui fica as coisas pra Dalton')
 
+#o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
-    ('/', index.html),
     ('/project', Project)
 ], debug=True)
