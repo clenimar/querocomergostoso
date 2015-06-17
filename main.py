@@ -24,3 +24,5 @@ class Project(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/project', Project)
 ], debug=True)
+
+

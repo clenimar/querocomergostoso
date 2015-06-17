@@ -10,10 +10,23 @@ handlers:
   upload: favicon\.ico
 
 - url: /
-  static_files: index.html
-  upload: index.html
+  static_files: static/index.html
+  upload: static/index.html
   
-- url: /(.+)
+- url: /(.*\.html)$
+  static_files: static/\1
+  upload: static/.*\.html$
+
+- url: /css
+  static_dir: static/css
+- url: /fonts
+  static_dir: static/fonts
+- url: /img
+  static_dir: static/img
+- url: /js
+  static_dir: static/js
+
+- url: /project
   script: main.app
 
 libraries:
