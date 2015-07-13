@@ -26,7 +26,10 @@ handlers:
 - url: /js
   static_dir: static/js
 
-- url: /project
+- url: /dalton
+  script: main.app
+
+- url: /api/restaurant
   script: main.app
 
 libraries:
