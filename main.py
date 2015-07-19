@@ -13,8 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import datetime
+import json
 import models
+import util
 import webapp2
 
 
@@ -25,21 +27,30 @@ class Project(webapp2.RequestHandler):
 
 class Restaurant(webapp2.RequestHandler):
     def get(self):
-        try:
-            restaurants = models.Restaurant.get_restaurants()
-            self.response.headers["Content-Type"] = "application/json"
-            self.response.out.write(restaurants)
-        except Exception:
-            self.error(500)
+        restaurants = models.Restaurant.get_restaurants()
+        self.response.headers["Content-Type"] = "application/json"
+        self.response.out.write(json.dumps(restaurants, cls=util.JSONEncoder))
 
     def post(self):
+        # turns the json request data, str, into a dict
+        data = json.loads(self.request.body)
         # creates a new Restaurant
         new = models.Restaurant()
-        # changes its attributes
-        new.email = self.request.get('email')
-        new.pwd = self.request.get('password')
-        new.name = self.request.get('name')
-        new.owner = self.request.get('owner')
+        # creates its attributes
+        new.email = data["email"]
+        new.password = data["password"]
+        new.name = data["name"]
+        # DEV-ONLY: creates new Owner
+        owner = models.Owner()
+        owner_data = data["owner"]
+        owner.name = owner_data['name']
+        owner.cpf = owner_data['cpf']
+        owner.birthday = datetime.datetime.strptime(owner_data['birthday'], "%m-%d-%Y")
+
+        # persists the new Owner
+        models.Owner.create_owner(owner)
+        
+        new.owner = owner
 
         if self.request.get('menu'):
             new.menu = self.request.get('menu')
@@ -47,13 +58,9 @@ class Restaurant(webapp2.RequestHandler):
         # persists the new Restaurant
         models.Restaurant.create_restaurant(new)
 
-        # TODO: return a JSON response
-
 
 #o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
     ('/dalton', Project),
     ('/api/restaurant', Restaurant)
 ], debug=True)
-
-
