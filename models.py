@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from google.appengine.ext import ndb
 
 
@@ -5,6 +6,10 @@ class Owner(ndb.Model):
     name = ndb.StringProperty()
     cpf = ndb.StringProperty()
     birthday = ndb.DateProperty()
+
+    @staticmethod
+    def create_owner(new):
+        new.put()
 
 
 class ItemMenu(ndb.Model):
@@ -42,11 +47,10 @@ class Restaurant(ndb.Model):
     orders = ndb.KeyProperty(kind=Order, repeated=True)
 
     @staticmethod
-    def get_restaurants(self, restaurant_id=None):
-        if restaurant_id:
-            return Restaurant.query(Restaurant.id == restaurant_id)
-        return Restaurant.query()
+    def get_restaurants(restaurant_id=None):
+        return Restaurant.query().get().to_dict()
 
     @staticmethod
     def create_restaurant(new):
         new.put()
+
