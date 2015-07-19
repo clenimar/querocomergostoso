@@ -46,11 +46,11 @@ class Restaurant(ndb.Model):
     menu = ndb.StructuredProperty(ItemMenu, repeated=True)
     orders = ndb.KeyProperty(kind=Order, repeated=True)
 
-    @staticmethod
-    def get_restaurants(restaurant_id=None):
-        return Restaurant.query().get().to_dict()
+    @classmethod
+    def get_restaurants(self):
+        return Restaurant.query().fetch(20)
 
-    @staticmethod
-    def create_restaurant(new):
+    @classmethod
+    def create_restaurant(self, new):
         new.put()
 
