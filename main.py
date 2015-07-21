@@ -79,6 +79,13 @@ class Restaurant(webapp2.RequestHandler):
             output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
 
+    def delete(self, restaurant_key):
+        try:
+           models.Restaurant.delete_restaurant(restaurant_key)
+           self.response.out.write("Hasta la vista, baby!")
+        except Exception, e:
+            self.response.out.write("wut")
+
 
 # o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
