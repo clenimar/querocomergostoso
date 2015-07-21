@@ -25,9 +25,10 @@ class Project(webapp2.RequestHandler):
         self.response.write('olars.')
 
 
-class Restaurant(webapp2.RequestHandler):
+class RestaurantList(webapp2.RequestHandler):
     def get(self):
         restaurants = models.Restaurant.get_restaurants()
+        # TODO: write some to handle the HTTP headers (they're really important, man)
         self.response.headers["Content-Type"] = "application/json"
         self.response.out.write(json.dumps(restaurants, cls=util.JSONEncoder))
 
@@ -59,8 +60,29 @@ class Restaurant(webapp2.RequestHandler):
         models.Restaurant.create_restaurant(new)
 
 
-#o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
+class Restaurant(webapp2.RequestHandler):
+    def get(self, restaurant_key):
+        # tries to query the Restaurant whose Key is specified in the url path
+        # note: the key in url path MUST BE in a urlsafe form
+        try:
+            restaurant = models.Restaurant.get_restaurants(restaurant_key)
+            if restaurant:
+                self.response.out.write(json.dumps(restaurant, cls=util.JSONEncoder))
+            else:
+                self.response.out.write(json.dumps({"msg":"There's no such Restaurant. Try again."}))
+        # well, you know...
+        # shit happens
+        # TODO: write this apart, as a decent error handler
+        except Exception, e:
+            output = {}
+            output["msg"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
+
+
+# o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
     ('/dalton', Project),
-    ('/api/restaurant', Restaurant)
+    ('/api/restaurant', RestaurantList),
+    ('/api/restaurant/([^/]+)', Restaurant)
 ], debug=True)

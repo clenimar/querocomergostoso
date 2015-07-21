@@ -47,7 +47,10 @@ class Restaurant(ndb.Model):
     orders = ndb.KeyProperty(kind=Order, repeated=True)
 
     @classmethod
-    def get_restaurants(self):
+    def get_restaurants(self, restaurant_key=None):
+        if restaurant_key:
+            query = ndb.Key(urlsafe=restaurant_key)
+            return query.get()
         return Restaurant.query().fetch(20)
 
     @classmethod
