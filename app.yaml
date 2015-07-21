@@ -26,11 +26,9 @@ handlers:
 - url: /js
   static_dir: static/js
 
-- url: /dalton
+- url: (.*)
   script: main.app
 
-- url: /api/restaurant
-  script: main.app
 
 libraries:
 - name: webapp2
