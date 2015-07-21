@@ -10,7 +10,7 @@ Alunos:
 * Gustavo Alves [@GustavoMA](https://www.github.com/GustavoMA)
 * Julie Pessoa [@JuliePessoa](https://www.github.com/JuliePessoa)
 * Isabelly Cavalcante [@IsabellyCavalcante](https://github.com/IsabellyCavalcante)
-* Clenimar Filemon [@cfilemon](https://github.com/cfilemon)
+* Clenimar Filemon [@clenimar](https://github.com/clenimar)
 * Adolfo Melo [@adolfomelo](https://github.com/adolfomelo)
 
 O que é?
