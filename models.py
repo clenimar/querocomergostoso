@@ -48,30 +48,29 @@ class Restaurant(ndb.Model):
 
     @classmethod
     def get_restaurants(self, restaurant_key=None):
-        '''Returns a Restaurant, given a valid key.
-        Give it no key and it'll return all the Restaurants'''
+        """Returns a Restaurant, given a valid key.
+        Give it no key and it'll return all the Restaurants"""
         if restaurant_key:
             query = ndb.Key(urlsafe=restaurant_key)
             return query.get()
         return Restaurant.query().fetch(20)
 
     @classmethod
-    def create_restaurant(self, new):
-        '''Puts a new Restaurant into datastore.
-        Returns True if success, False otherwise'''
-        if isinstance(new, ndb.Model.Restaurant):
+    def save_restaurant(self, new):
+        """Puts a new Restaurant into datastore.
+        Returns True if success, False otherwise"""
+        if isinstance(new, Restaurant):
             new.put()
             return True
         return False
 
     @classmethod
     def delete_restaurant(self, key):
-        '''Deletes a Restaurant, given a valid key.
-        Invalid keys will lead to an exception'''
+        """Deletes a Restaurant, given a valid key.
+        Invalid keys will lead to an exception"""
         try:
             whosgonnadie = ndb.Key(urlsafe=key)
             whosgonnadie.delete()
-
         except Exception, e:
             output = {}
             output["message"] = "Well... it's embarassing. I don't know that happent. Sorry."

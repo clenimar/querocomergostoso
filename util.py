@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 
 
 class JSONEncoder(json.JSONEncoder):
-    ''' it seems that trying to dump a Query Object after turning it into 
+    """ it seems that trying to dump a Query Object after turning it into
         a dict through ndb.Model.to_dict() leads to some annoying errors
         because datetimes are not serializable.
 
@@ -15,7 +15,7 @@ class JSONEncoder(json.JSONEncoder):
         until the next bug, at least
 
         -- clenimar @ 19-07
-    '''
+    """
     def default(self, obj):
         if isinstance(obj, (datetime.datetime, datetime.date)):
             return obj.strftime("%d-%m-%Y")

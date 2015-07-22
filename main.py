@@ -20,6 +20,10 @@ import util
 import webapp2
 
 
+# modifiable fields for a Restaurant through PATCH /api/restaurant/<key>
+REST_PATCH_ALLOWED_FIELDS = ["name", "email", "password", "owner"]
+
+
 class Project(webapp2.RequestHandler):
     def get(self):
         self.response.write('olars.')
@@ -57,7 +61,7 @@ class RestaurantList(webapp2.RequestHandler):
             new.menu = self.request.get('menu')
 
         # persists the new Restaurant
-        models.Restaurant.create_restaurant(new)
+        models.Restaurant.save_restaurant(new)
 
 
 class Restaurant(webapp2.RequestHandler):
@@ -81,11 +85,43 @@ class Restaurant(webapp2.RequestHandler):
 
     def delete(self, restaurant_key):
         try:
-           models.Restaurant.delete_restaurant(restaurant_key)
-           self.response.out.write("Hasta la vista, baby!")
+            models.Restaurant.delete_restaurant(restaurant_key)
+            self.response.out.write("Hasta la vista, baby!")
         except Exception, e:
-            self.response.out.write("wut")
+            output = {}
+            output["msg"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
 
+    # operations allowed for PATCH /api/restaurant/<key>
+    # - replace
+    def patch(self, restaurant_key):
+        try:
+            # tries to retrieve the Restaurant
+            restaurant = models.Restaurant.get_restaurants(restaurant_key)
+            if restaurant:
+                # gets the request data that describes the operation
+                patch_info = json.loads(self.request.body)
+                # checks if the given path is a modifiable attribute
+                if patch_info["path"][1:] in REST_PATCH_ALLOWED_FIELDS:
+                    # replaces the attribute
+                    setattr(restaurant, patch_info["path"][1:], patch_info["value"])
+                    if models.Restaurant.save_restaurant(restaurant):
+                        # and save it
+                        self.response.out.write(json.dumps({"msg": "Changes were applied to the Restaurant"}))
+        except Exception, e:
+            output = {}
+            output["msg"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
+
+
+# it seems that webapp2 doesn't support HTTP method PATCH
+# so, the following code monkey patchs the webapp2 to allow it.
+# (more information at https://code.google.com/p/webapp-improved/issues/detail?id=69)
+allowed_methods = webapp2.WSGIApplication.allowed_methods
+new_allowed_methods = allowed_methods.union(('PATCH',))
+webapp2.WSGIApplication.allowed_methods = new_allowed_methods
 
 # o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
