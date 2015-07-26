@@ -115,21 +115,24 @@ class Menu(webapp2.RequestHandler):
         self.response.out.write(json.dumps(menu, cls=util.JSONEncoder))
 
     def post(self, restaurant_key):
-        success = True
         # gets the restaurant
         try:
             restaurant = models.Restaurant.get_restaurants(restaurant_key)
         except Exception, e:
-            print e
-
+            output = {}
+            output["message"] = "Something went really, really wrong. Try again."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
         item_data = json.loads(self.request.body)
         # creates a new Item Menu
         new = models.ItemMenu()
         new.name = item_data["name"]
         new.price = float(item_data["price"])
         new.description = item_data["description"]
+        models.ItemMenu.save_item(new)
         # adds the new item to the menu
         restaurant.menu.append(new)
         # persists the restaurant with modified menu
         models.Restaurant.save_restaurant(restaurant)
-        
+        self.response.out.write("Yay! Your request has been processed!")
+

@@ -17,6 +17,13 @@ class ItemMenu(ndb.Model):
     description = ndb.TextProperty()
     price = ndb.FloatProperty()
 
+    @classmethod
+    def save_item(self, item):
+        if isinstance(item, ItemMenu):
+            item.put()
+            return True
+        return False
+
 
 class Order(ndb.Model):
     items = ndb.StructuredProperty(ItemMenu, repeated=True)
