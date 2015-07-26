@@ -26,5 +26,6 @@ class Project(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/dalton', Project),
     ('/api/restaurant', api.RestaurantList),
-    ('/api/restaurant/([^/]+)', api.Restaurant)
+    ('/api/restaurant/([^/]+)', api.Restaurant),
+    ('/api/restaurant/([^/]+)/menu', api.Menu),
 ], debug=True)

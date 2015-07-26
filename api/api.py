@@ -5,6 +5,8 @@ import models
 import util
 import webapp2
 
+import logging
+
 
 # it seems that webapp2 doesn't support HTTP method PATCH
 # so, the following code monkey patchs the webapp2 to allow it.
@@ -103,3 +105,31 @@ class Restaurant(webapp2.RequestHandler):
             output["msg"] = "Something went really, really bad. Try again."
             output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
+
+
+class Menu(webapp2.RequestHandler):
+    def get(self, restaurant_key):
+        restaurant = models.Restaurant.get_restaurants(restaurant_key)
+        menu = restaurant.menu
+        self.response.headers["Content-Type"] = "application/json"
+        self.response.out.write(json.dumps(menu, cls=util.JSONEncoder))
+
+    def post(self, restaurant_key):
+        success = True
+        # gets the restaurant
+        try:
+            restaurant = models.Restaurant.get_restaurants(restaurant_key)
+        except Exception, e:
+            print e
+
+        item_data = json.loads(self.request.body)
+        # creates a new Item Menu
+        new = models.ItemMenu()
+        new.name = item_data["name"]
+        new.price = float(item_data["price"])
+        new.description = item_data["description"]
+        # adds the new item to the menu
+        restaurant.menu.append(new)
+        # persists the restaurant with modified menu
+        models.Restaurant.save_restaurant(restaurant)
+        
