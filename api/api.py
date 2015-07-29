@@ -54,9 +54,13 @@ class RestaurantList(webapp2.RequestHandler):
         # persists the new Restaurant
         models.Restaurant.save_restaurant(new)
 
+        output = {}
+        output["message"] = "Restaurant Created."
+        self.response.out.write(json.dumps(output))
+
 
 class Restaurant(webapp2.RequestHandler):
-    def get(self, restaurant_key):
+    def get(self, resmetaurant_key):
         # tries to query the Restaurant whose Key is specified in the url path
         # note: the key in url path MUST BE in a urlsafe form
         try:
@@ -64,13 +68,13 @@ class Restaurant(webapp2.RequestHandler):
             if restaurant:
                 self.response.out.write(json.dumps(restaurant, cls=util.JSONEncoder))
             else:
-                self.response.out.write(json.dumps({"msg":"There's no such Restaurant. Try again."}))
+                self.response.out.write(json.dumps({"message":"There's no such Restaurant. Try again."}))
         # well, you know...
         # shit happens
         # TODO: write this apart, as a decent error handler
         except Exception, e:
             output = {}
-            output["msg"] = "Something went really, really bad. Try again."
+            output["message"] = "Something went really, really bad. Try again."
             output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
 
@@ -80,7 +84,7 @@ class Restaurant(webapp2.RequestHandler):
             self.response.out.write("Hasta la vista, baby!")
         except Exception, e:
             output = {}
-            output["msg"] = "Something went really, really bad. Try again."
+            output["message"] = "Something went really, really bad. Try again."
             output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
 
@@ -102,7 +106,7 @@ class Restaurant(webapp2.RequestHandler):
                         self.response.out.write(json.dumps({"msg": "Changes were applied to the Restaurant"}))
         except Exception, e:
             output = {}
-            output["msg"] = "Something went really, really bad. Try again."
+            output["message"] = "Something went really, really bad. Try again."
             output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
 
@@ -129,10 +133,54 @@ class Menu(webapp2.RequestHandler):
         new.name = item_data["name"]
         new.price = float(item_data["price"])
         new.description = item_data["description"]
-        models.ItemMenu.save_item(new)
+        models.ItemMenu.save_item_menu(new)
         # adds the new item to the menu
         restaurant.menu.append(new)
         # persists the restaurant with modified menu
         models.Restaurant.save_restaurant(restaurant)
         self.response.out.write("Yay! Your request has been processed!")
+
+class ItemMenu(webapp2.RedirectHandler):
+    #TODO Test it, dude!
+    def get(self, restaurant_key, item_menu_key):
+        self.response.headers["Content-Type"] = "application/json"
+        try:
+            item_menu = models.ItemMenu.get_item_menu(item_menu_key)
+        except Exception, e:
+            output = {}
+            output["message"] = "No Item Menu with this key, sorry."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
+        self.response.out.write(json.dumps(item_menu, cls=util.JSONEncoder))
+
+    # TODO Test it, dude!
+    def put(self, restaurant_key, item_menu_key):
+        # gets the item menu
+        try:
+            item_menu = models.ItemMenu.get_item_menu(item_menu_key)
+        except Exception, e:
+            output = {}
+            output["message"] = "No Item Menu with this key, sorry."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
+        item_data = json.loads(self.request.body)
+        # update all data
+        item_menu.name = item_data["name"]
+        item_menu.price = float(item_data["price"])
+        item_menu.description = item_data["description"]
+        # put it
+        models.ItemMenu.save_item_menu(item_menu)
+
+        self.response.out.write("Yay! Your request has been processed!")
+
+    #TODO Test it, dude!
+    def delete(self, restaurant_key, item_menu_key):
+        try:
+            models.Restaurant.delete_restaurant(item_menu_key)
+            self.response.out.write("Hasta la vista, baby!")
+        except Exception, e:
+            output = {}
+            output["message"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
 

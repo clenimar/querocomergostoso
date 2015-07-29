@@ -18,11 +18,31 @@ class ItemMenu(ndb.Model):
     price = ndb.FloatProperty()
 
     @classmethod
-    def save_item(self, item):
+    def save_item_menu(self, item):
+        """Save the item, if doesn't exist, or update it, if exists"""
         if isinstance(item, ItemMenu):
             item.put()
             return True
         return False
+
+    @classmethod
+    def get_item_menu(self, item_menu_key):
+        """Returns a item menu , given a valid key."""
+        query = ndb.Key(urlsafe=item_menu_key)
+        return query.get()
+
+    @classmethod
+    def delete_item_menu(self, item_menu_key):
+        """Deletes a Restaurant, given a valid key.
+        Invalid keys will lead to an exception"""
+        try:
+            whosgonnadie = ndb.Key(urlsafe=item_menu_key)
+            whosgonnadie.delete()
+        except Exception, e:
+            output = {}
+            output["message"] = "Well... it's embarassing. I don't know that happent. Sorry."
+            output["error_message"] = e.message
+            return output
 
 
 class Order(ndb.Model):

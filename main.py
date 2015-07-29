@@ -28,4 +28,5 @@ app = webapp2.WSGIApplication([
     ('/api/restaurant', api.RestaurantList),
     ('/api/restaurant/([^/]+)', api.Restaurant),
     ('/api/restaurant/([^/]+)/menu', api.Menu),
+    ('/api/restaurant/([^/]+)/menu/([^/]+)', api.ItemMenu),
 ], debug=True)
