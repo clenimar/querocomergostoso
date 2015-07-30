@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>RESTful API - querocomergostoso</title>
+
+        <style>
+            main {
+                width: 60%;
+                margin: 20px auto;
+            }
+
+            .sep {
+                padding: 0;
+                margin: 15px 0 15px 0;
+                border-bottom: 1px solid;
+            }
+
+            .routeinfo {
+                font-family: Consolas;
+            }
+
+        </style>
+
+
+    </head>
+    <body>
+        <main>
+            <header>
+                <h1>Quero Comer Gostoso</h1>
+                <h1>RESTful API documentation</h1>
+                <p>last edit 29-07 @ 23h43 by clenimar</p>
+                <p><b>Disclaimer: this API is under development. Although all the routes listed below are up and working,
+                they may change their behaviour or just disappear with no warning. ¯\_(ツ)_/¯ </b></p>
+            </header>
+
+            <div class="sep"></div>
+
+            <section class="routeinfo">
+                <h4>GET /restaurant</h4>
+                <p>Returns all restaurants</p>
+
+                <h4>POST /restaurant</h4>
+                <p>Creates a new restaurant</p>
+
+                <h4>GET /restaurant/{id}</h4>
+                <p>Returns a restaurant whose id is given</p>
+
+                <h4>DELETE /restaurant/{id}</h4>
+                <p>Deletes a restaurant whose id is given</p>
+
+                <h4>PATCH /restaurant/{id}</h4>
+                <p>Patches a restaurant whose id is given. <b>Note: online replace operations are allowed!</b></p>
+
+                <h4>GET /restaurant/{id}/menu</h4>
+                <p>Returns the menu of the restaurant whose id is given</p>
+
+                <h4>POST /restaurant/{id}/menu</h4>
+                <p>Creates a new menu for that restaurant.<b>Note: If the restaurant already has one, it'll be replaced.</b></p>
+            </section>
+        </main>
+    </body>
+</html>
