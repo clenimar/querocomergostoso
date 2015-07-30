@@ -60,7 +60,7 @@ class RestaurantList(webapp2.RequestHandler):
 
 
 class Restaurant(webapp2.RequestHandler):
-    def get(self, resmetaurant_key):
+    def get(self, restaurant_key):
         # tries to query the Restaurant whose Key is specified in the url path
         # note: the key in url path MUST BE in a urlsafe form
         try:
@@ -140,7 +140,7 @@ class Menu(webapp2.RequestHandler):
         models.Restaurant.save_restaurant(restaurant)
         self.response.out.write("Yay! Your request has been processed!")
 
-class ItemMenu(webapp2.RedirectHandler):
+class ItemMenu(webapp2.RequestHandler):
     #TODO Test it, dude!
     def get(self, restaurant_key, item_menu_key):
         self.response.headers["Content-Type"] = "application/json"
