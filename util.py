@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import datetime
 import json
+import models
 from google.appengine.ext import ndb
 
+import logging
 
 class JSONEncoder(json.JSONEncoder):
     """ it seems that trying to dump a Query Object after turning it into
@@ -21,7 +23,11 @@ class JSONEncoder(json.JSONEncoder):
             return obj.strftime("%d-%m-%Y")
 
         elif isinstance(obj, ndb.Key):
-            return obj.urlsafe()
+            if obj.kind() == "Restaurant":
+                return obj.urlsafe()
+            elif obj.kind() == "ItemMenu":
+                return models.ItemMenu.get_item_menu(obj.urlsafe())
+
 
         elif isinstance(obj, ndb.Model):
             d = obj.to_dict()

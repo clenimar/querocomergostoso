@@ -135,7 +135,7 @@ class Menu(webapp2.RequestHandler):
         new.description = item_data["description"]
         models.ItemMenu.save_item_menu(new)
         # adds the new item to the menu
-        restaurant.menu.append(new)
+        restaurant.menu.append(new.key)
         # persists the restaurant with modified menu
         models.Restaurant.save_restaurant(restaurant)
         self.response.out.write("Yay! Your request has been processed!")

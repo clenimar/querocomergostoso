@@ -70,7 +70,7 @@ class Restaurant(ndb.Model):
     password = ndb.StringProperty()
     name = ndb.StringProperty()
     owner = ndb.StructuredProperty(Owner)
-    menu = ndb.StructuredProperty(ItemMenu, repeated=True)
+    menu = ndb.KeyProperty(ItemMenu, repeated=True)
     orders = ndb.KeyProperty(kind=Order, repeated=True)
 
     @classmethod
