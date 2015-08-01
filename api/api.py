@@ -140,8 +140,8 @@ class Menu(webapp2.RequestHandler):
         models.Restaurant.save_restaurant(restaurant)
         self.response.out.write("Yay! Your request has been processed!")
 
+
 class ItemMenu(webapp2.RequestHandler):
-    #TODO Test it, dude!
     def get(self, restaurant_key, item_menu_key):
         self.response.headers["Content-Type"] = "application/json"
         try:
@@ -153,7 +153,6 @@ class ItemMenu(webapp2.RequestHandler):
             self.response.out.write(json.dumps(output))
         self.response.out.write(json.dumps(item_menu, cls=util.JSONEncoder))
 
-    # TODO Test it, dude!
     def put(self, restaurant_key, item_menu_key):
         # gets the item menu
         try:
@@ -173,7 +172,6 @@ class ItemMenu(webapp2.RequestHandler):
 
         self.response.out.write("Yay! Your request has been processed!")
 
-    #TODO Test it, dude!
     def delete(self, restaurant_key, item_menu_key):
         try:
             models.Restaurant.delete_restaurant(item_menu_key)

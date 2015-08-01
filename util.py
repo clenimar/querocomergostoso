@@ -28,7 +28,6 @@ class JSONEncoder(json.JSONEncoder):
             elif obj.kind() == "ItemMenu":
                 return models.ItemMenu.get_item_menu(obj.urlsafe())
 
-
         elif isinstance(obj, ndb.Model):
             d = obj.to_dict()
             if obj.key is not None:
