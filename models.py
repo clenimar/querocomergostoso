@@ -56,6 +56,20 @@ class Customer(ndb.Model):
     phone = ndb.StringProperty()
     orders = ndb.KeyProperty(kind=Order, repeated=True)
 
+    @classmethod
+    def save_customer(cls, new):
+        if isinstance(new, Customer):
+            new.put()
+            return True
+        return False
+
+    @classmethod
+    def get_customer(cls, customer_key=None):
+        if customer_key:
+            query = ndb.Key(urlsafe=customer_key)
+            return query.get()
+        return Customer.query().fetch(20)
+
 
 class Address(ndb.Model):
     street = ndb.StringProperty()

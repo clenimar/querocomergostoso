@@ -182,3 +182,27 @@ class ItemMenu(webapp2.RequestHandler):
             output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
 
+
+class CustomerList(webapp2.RequestHandler):
+    def get(self):
+        customers = models.Customer.get_customer()
+        self.response.out.headers["Content-Type"] = 'application/json'
+        self.response.out.write(json.dumps(customers, cls=util.JSONEncoder))
+
+    def post(self):
+        data = json.loads(self.request.body)
+        new = models.Customer()
+        new.name = data["name"]
+        new.phone = data["phone"]
+        new.password = data["password"]
+        new.email = data["email"]
+
+        output = {}
+        try:
+            models.Customer.save_customer(new)
+            output["message"] = "Success! You are now one of us, Tobby!"
+        except Exception, e:
+            output["message"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
+
+        self.response.out.write(json.dumps(output))
