@@ -70,6 +70,12 @@ class Customer(ndb.Model):
             return query.get()
         return Customer.query().fetch(20)
 
+    @classmethod
+    def delete_restaurant(cls, customer_key):
+        stalin_sends_regards = ndb.Key(urlsafe=customer_key)
+        stalin_sends_regards.delete()
+
+
 
 class Address(ndb.Model):
     street = ndb.StringProperty()

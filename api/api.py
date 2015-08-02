@@ -5,8 +5,6 @@ import models
 import util
 import webapp2
 
-import logging
-
 
 # it seems that webapp2 doesn't support HTTP method PATCH
 # so, the following code monkey patchs the webapp2 to allow it.
@@ -18,6 +16,8 @@ webapp2.WSGIApplication.allowed_methods = new_allowed_methods
 
 # modifiable fields for a Restaurant through PATCH /api/restaurant/<key>
 REST_PATCH_ALLOWED_FIELDS = ["name", "email", "password", "owner"]
+# modifiable fields for a Customer through PATCH /api/customer/<key>
+CUST_PATCH_ALLOWED_FIELDS = ["name", "password", "phone", "email"]
 
 
 class RestaurantList(webapp2.RequestHandler):
@@ -205,4 +205,44 @@ class CustomerList(webapp2.RequestHandler):
             output["message"] = "Something went really, really bad. Try again."
             output["error_message"] = e.message
 
+        self.response.out.write(json.dumps(output))
+
+
+class Customer(webapp2.RequestHandler):
+    def get(self, customer_key):
+        try:
+            customer = models.Customer.get_customer(customer_key)
+            if not customer: raise Exception
+            self.response.out.write(json.dumps(customer, cls=util.JSONEncoder))
+        except Exception, e:
+            output = {}
+            output["message"] = "Sorry. We don't know this person you're looking for. Try: http://www.google.com."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
+
+    # allowed operations:
+    #   - replace
+    def patch(self, customer_key):
+        try:
+            customer = models.Customer.get_customer(customer_key)
+            if customer:
+                patch_info = json.loads(self.request.body)
+                if patch_info["path"][1:] in CUST_PATCH_ALLOWED_FIELDS:
+                    setattr(customer, patch_info["path"][1:], patch_info["value"])
+                    if models.Customer.save_customer(customer):
+                        self.response.out.write(json.dumps({"message": "Customer updated successfully"}))
+        except Exception, e:
+            output = {}
+            output["message"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
+            self.response.out.write(json.dumps(output))
+
+    def delete(self, customer_key):
+        output = {}
+        try:
+            models.Customer.delete_restaurant(customer_key)
+            output["message"] = "Rest in peace, honey."
+        except Exception, e:
+            output["message"] = "Sorry. We don't know this person you're looking for. Try: http://www.google.com."
+            output["error_message"] = e.message
         self.response.out.write(json.dumps(output))
