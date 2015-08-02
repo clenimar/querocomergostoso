@@ -246,3 +246,50 @@ class Customer(webapp2.RequestHandler):
             output["message"] = "Sorry. We don't know this person you're looking for. Try: http://www.google.com."
             output["error_message"] = e.message
         self.response.out.write(json.dumps(output))
+
+
+class OrderListByRestaurant(webapp2.RequestHandler):
+    def get(self, restaurant_key):
+        restaurant = models.Restaurant.get_restaurants(restaurant_key)
+        orders = restaurant.orders
+        self.response.out.write(json.dumps(orders, cls=util.JSONEncoder))
+
+    def post(self, restaurant_key):
+        restaurant = models.Restaurant.get_restaurants(restaurant_key)
+        output = {}
+        if restaurant:
+            order_data = json.loads(self.request.body)
+            new = models.Order()
+            new.completed = False
+
+            for item_key in order_data["items"]:
+                item = models.ItemMenu.get_item_menu(item_key)
+                new.items.append(item.key)
+
+            # persists the new order
+            models.Order.save_order(new)
+            # append the new order to the restaurant:
+            restaurant.orders.append(new.key)
+            models.Restaurant.save_restaurant(restaurant)
+            # appends the new order to the customer:
+            customer = models.Customer.get_customer(order_data["customer"])
+            customer.orders.append(new.key)
+            models.Customer.save_customer(customer)
+
+            output["message"] = "Your order has been placed!"
+            self.response.out.write(json.dumps(output))
+        else:
+            output["message"] = "Something went really, really bad. Try again."
+            self.response.out.write(json.dumps(output))
+
+
+class OrderListByCustomer(webapp2.RequestHandler):
+    def get(self, customer_key):
+        customer = models.Customer.get_customer(customer_key)
+        if customer:
+            orders = customer.orders
+            self.response.out.write(json.dumps(orders, cls=util.JSONEncoder))
+        else:
+            output = {}
+            output["message"] = "Something went really, really bad. Try again."
+            self.response.out.write(json.dumps(output))

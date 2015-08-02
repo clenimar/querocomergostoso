@@ -46,8 +46,33 @@ class ItemMenu(ndb.Model):
 
 
 class Order(ndb.Model):
-    items = ndb.StructuredProperty(ItemMenu, repeated=True)
+    items = ndb.KeyProperty(ItemMenu, repeated=True)
+    completed = ndb.BooleanProperty()
 
+    @classmethod
+    def save_order(cls, new):
+        if isinstance(new, Order):
+            new.put()
+
+    @classmethod
+    def get_order(cls, order_key=None):
+        if order_key:
+            query = ndb.Key(urlsafe=order_key)
+            return query.get()
+        return Order.query().fetch(20)
+
+    @classmethod
+    def delete_order(cls, order_key):
+        poorfella = ndb.Key(urlsafe=order_key)
+        poorfella.delete()
+
+    @staticmethod
+    def get_status(self):
+        return self.completed
+
+    @staticmethod
+    def set_status(self, new):
+        self.completed = new
 
 class Customer(ndb.Model):
     email = ndb.StringProperty()
