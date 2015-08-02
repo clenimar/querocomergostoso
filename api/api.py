@@ -18,6 +18,8 @@ webapp2.WSGIApplication.allowed_methods = new_allowed_methods
 REST_PATCH_ALLOWED_FIELDS = ["name", "email", "password", "owner"]
 # modifiable fields for a Customer through PATCH /api/customer/<key>
 CUST_PATCH_ALLOWED_FIELDS = ["name", "password", "phone", "email"]
+# modifiable fields for a Customer through PATCH /api/restaurant/<rest_key>/order/<order_key>
+ORDER_PATCH_ALLOWED_FIELDS = ["completed"]
 
 
 class RestaurantList(webapp2.RequestHandler):
@@ -292,4 +294,32 @@ class OrderListByCustomer(webapp2.RequestHandler):
         else:
             output = {}
             output["message"] = "Something went really, really bad. Try again."
+            self.response.out.write(json.dumps(output))
+
+
+class Order(webapp2.RequestHandler):
+    def get(self, restaurant_key, order_key):
+        restaurant = models.Restaurant.get_restaurants(restaurant_key)
+        order = models.Order.get_order(order_key)
+        if restaurant and order:
+            self.response.out.write(json.dumps(order, cls=util.JSONEncoder))
+        else:
+            output = {}
+            output["message"] = "No orders for you, Eugene."
+
+    # allowed operations:
+    #   - replace
+    def patch(self, restaurant_key, order_key):
+        try:
+            order = models.Order.get_order(order_key)
+            if order:
+                patch_info = json.loads(self.request.body)
+                if patch_info["path"][1:] in ORDER_PATCH_ALLOWED_FIELDS:
+                    setattr(order, patch_info["path"][1:], bool(patch_info["value"]))
+                    models.Order.save_order(order)
+                    self.response.out.write(json.dumps({"message": "Order updated successfully"}))
+        except Exception, e:
+            output = {}
+            output["message"] = "Something went really, really bad. Try again."
+            output["error_message"] = e.message
             self.response.out.write(json.dumps(output))
