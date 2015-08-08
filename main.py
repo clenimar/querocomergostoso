@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from api import api
+from api import api, metadata
 import webapp2
 
 
@@ -24,7 +24,8 @@ class Project(webapp2.RequestHandler):
 
 # o index esta num arquivo separado chamado index.html que eh chamado no app.yaml
 app = webapp2.WSGIApplication([
-    ('/dalton', Project),
+    ('/api/meta/action', metadata.Actions),
+    ('/api/meta/todo', metadata.Todos),
     ('/api/restaurant', api.RestaurantList),
     ('/api/restaurant/([^/]+)', api.Restaurant),
     ('/api/restaurant/([^/]+)/order', api.OrderListByRestaurant),

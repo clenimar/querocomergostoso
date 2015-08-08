@@ -3,7 +3,7 @@
 
 	app.service('ActionsServices', function ($http) {
 		this.getActions = function () {
-			return $http.get('/api/meta/l33t/action')
+			return $http.get('/api/meta/action')
 		}
 
 		this.getTodos = function () {
@@ -13,7 +13,7 @@
 
 	app.controller('projectMetadataCtrl', function ($scope, ActionsServices) {
 		$scope.actionList = {}
-		$scope.todoList = [{"desc":"put the team to work!"}, {"desc":"grab a beer"}]
+		$scope.todoList = {}
 		$scope.team = {}
 
 		ActionsServices.getActions()
@@ -22,12 +22,19 @@
 				$scope.actionList = data;
 			})
 			.error(function () {
-				console.log("Dummy content!")
-				$scope.actionList = [
-					{"desc": "new metadata page!!",
-					"author": "clenimar"},
-				]
+				console.log("Something went wrong while trying to get changelog.")
+			});
+
+		ActionsServices.getTodos()
+			.success(function (data) {
+				console.log("Getting to-dos...")
+				$scope.todoList = data;
 			})
+			.error(function () {
+				console.log("Something went wrong while trying to get to-dos.")
+			})
+
+
 	});
 
 
