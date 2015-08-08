@@ -13,10 +13,14 @@ handlers:
   static_files: static/index.html
   upload: static/index.html
 
+- url: /project
+  static_files: static/project.html
+  upload: static/project.html
+
 - url: /api
-  static_files: api/docs/api_docs.html
-  upload: api/docs/api_docs.html
-  
+  static_files: static/apidocs.html
+  upload: api/docs/apidocs.html
+
 - url: /(.*\.html)$
   static_files: static/\1
   upload: static/.*\.html$
