@@ -28,7 +28,7 @@ class ItemMenu(ndb.Model):
     @classmethod
     def get_item_menu(self, item_menu_key):
         """Returns a item menu , given a valid key."""
-        query = ndb.Key(urlsafe=item_menu_key)
+        query = ItemMenu.query(ItemMenu.key == ndb.Key(urlsafe = item_menu_key))
         return query.get()
 
     @classmethod
@@ -36,7 +36,7 @@ class ItemMenu(ndb.Model):
         """Deletes a Restaurant, given a valid key.
         Invalid keys will lead to an exception"""
         try:
-            whosgonnadie = ndb.Key(urlsafe=item_menu_key)
+            whosgonnadie = ItemMenu.query(ItemMenu.key == ndb.Key(urlsafe=item_menu_key))
             whosgonnadie.delete()
         except Exception, e:
             output = {}
@@ -57,14 +57,15 @@ class Order(ndb.Model):
     @classmethod
     def get_order(cls, order_key=None):
         if order_key:
-            query = ndb.Key(urlsafe=order_key)
+            query = Order.query(Order.key == ndb.Key(urlsafe=order_key))
             return query.get()
         return Order.query().fetch(20)
 
     @classmethod
     def delete_order(cls, order_key):
-        poorfella = ndb.Key(urlsafe=order_key)
-        poorfella.delete()
+        poorfella = Order.query(Order.key == ndb.Key(urlsafe=order_key))
+        if poorfella:
+            poorfella.delete()
 
     @staticmethod
     def get_status(self):
@@ -73,6 +74,7 @@ class Order(ndb.Model):
     @staticmethod
     def set_status(self, new):
         self.completed = new
+
 
 class Customer(ndb.Model):
     email = ndb.StringProperty()
@@ -91,15 +93,15 @@ class Customer(ndb.Model):
     @classmethod
     def get_customer(cls, customer_key=None):
         if customer_key:
-            query = ndb.Key(urlsafe=customer_key)
+            query = Customer.query(Customer.key == ndb.Key(urlsafe=customer_key))
             return query.get()
         return Customer.query().fetch(20)
 
     @classmethod
     def delete_restaurant(cls, customer_key):
-        stalin_sends_regards = ndb.Key(urlsafe=customer_key)
-        stalin_sends_regards.delete()
-
+        stalin_sends_regards = Customer.query(Customer.key == ndb.Key(urlsafe=customer_key))
+        if stalin_sends_regards:
+            stalin_sends_regards.delete()
 
 
 class Address(ndb.Model):
@@ -123,7 +125,7 @@ class Restaurant(ndb.Model):
         """Returns a Restaurant, given a valid key.
         Give it no key and it'll return all the Restaurants"""
         if restaurant_key:
-            query = ndb.Key(urlsafe=restaurant_key)
+            query = Restaurant.query(Restaurant.key == ndb.Key(urlsafe=restaurant_key))
             return query.get()
         return Restaurant.query().fetch(20)
 
@@ -137,18 +139,15 @@ class Restaurant(ndb.Model):
         return False
 
     @classmethod
-    def delete_restaurant(self, key):
+    def delete_restaurant(self, restaurant_key):
         """Deletes a Restaurant, given a valid key.
         Invalid keys will lead to an exception"""
         try:
-            whosgonnadie = ndb.Key(urlsafe=key)
-            whosgonnadie.delete()
+            whosgonnadie = Restaurant.query(Restaurant.key == ndb.Key(urlsafe=restaurant_key))
+            if whosgonnadie:
+                whosgonnadie.delete()
         except Exception, e:
             output = {}
             output["message"] = "Well... it's embarassing. I don't know that happent. Sorry."
             output["error_message"] = e.message
             return output
-
-
-
-
