@@ -1116,3 +1116,9 @@ li.todo:before {
 	font-size:0.9em;
 	font-style: italic;
 }
+
+.api-example {
+	padding: 10px 30px;
+	font-family: Lucida Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 0.9em;
+}

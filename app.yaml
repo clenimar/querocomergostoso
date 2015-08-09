@@ -19,7 +19,7 @@ handlers:
 
 - url: /api
   static_files: static/apidocs.html
-  upload: api/docs/apidocs.html
+  upload: static/apidocs.html
 
 - url: /(.*\.html)$
   static_files: static/\1
@@ -27,6 +27,8 @@ handlers:
 
 - url: /css
   static_dir: static/css
+- url: /skin
+  static_dir: static/skin
 - url: /fonts
   static_dir: static/fonts
 - url: /img
