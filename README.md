@@ -11,7 +11,6 @@ Alunos:
 * Julie Pessoa [@JuliePessoa](https://www.github.com/JuliePessoa)
 * Isabelly Cavalcante [@IsabellyCavalcante](https://github.com/IsabellyCavalcante)
 * Clenimar Filemon [@clenimar](https://github.com/clenimar)
-* Adolfo Melo [@adolfomelo](https://github.com/adolfomelo)
 
 O que é?
 --------
