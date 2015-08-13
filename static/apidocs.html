@@ -90,7 +90,7 @@
 							"owner": { "name":"Gregor Samsa", "cpf":"11122233344", "birthday":"02-01-1915" } } ]
 							<br />
 							<br />
-							204 CREATED
+							201 CREATED
 							<br />
 							[ { "message":"Restaurant Created." } ]
 						</div>
@@ -105,12 +105,12 @@
 						<p>Returns the restaurant specified by the key parameter.</p>
 						Example:
 						<div class="api-example align-left">
-							GET /api/restaurant/imAgInETHisIsAVAliDResTauRanTKEy
+							GET /api/restaurant/imAgInETHisIsAResTauRanTKEy
 							<br />
 							<br />
 							200 OK
 							<br />
-							[ { "key":"imAgInETHisIsAVAliDResTauRanTKEy", ..., "name":"Los Pollos Hermanos" } ]
+							[ { "key":"imAgInETHisIsAResTauRanTKEy", ..., "name":"Los Pollos Hermanos" } ]
 						</div>
 					</div>
 				</div>
@@ -121,7 +121,7 @@
 						<p>Deletes the restaurant specified by the key parameter. <b>Requires authentication.</b></p>
 						Example:
 						<div class="api-example align-left">
-							DELETE /api/restaurant/imAgInETHisIsAVAliDResTauRanTKEy
+							DELETE /api/restaurant/imAgInETHisIsAResTauRanTKEy
 							<br />
 							<br />
 							200 OK
@@ -139,7 +139,7 @@
 						<p>Patches the restaurant specified by the key parameter. <b>Requires authentication. Only <i>replace</i> operations are allowed.</b></p>
 						Example:
 						<div class="api-example align-left">
-							PATCH /api/restaurant/imAgInETHisIsAVAliDResTauRanTKEy
+							PATCH /api/restaurant/imAgInETHisIsAResTauRanTKEy
 							<br />
 							[ {"op":"replace", "path":"/email", "value":"gregor_100sual@hotmail.com"} ]
 							<br />
@@ -157,7 +157,7 @@
 						<p>Returns a collection of all menu items of the Restaurant specified by the key parameter.</p>
 						Example:
 						<div class="api-example align-left">
-							DELETE /api/restaurant/imAgInETHisIsAVAliDResTauRanTKEy/menu
+							GET /api/restaurant/imAgInETHisIsAResTauRanTKEy/menu
 							<br />
 							<br />
 							200 OK
@@ -176,12 +176,12 @@
 						<p>Creates a new item in the menu of the Restaurant specified by the key parameter <b>Requires authentication.</b></p>
 						Example:
 						<div class="api-example align-left">
-							POST /api/restaurant/imAgInETHisIsAVAliDResTauRanTKEy/menu
+							POST /api/restaurant/imAgInETHisIsAResTauRanTKEy/menu
 							<br />
 							[ {"name":"Vermin au Cordon Bleu", "price":"59.90", "desc":"Splendide!"} ]
 							<br />
 							<br />
-							204 OK
+							201 CREATED
 							<br />
 							[ { "message":"Yay! Success!" } ]
 						</div>
@@ -194,16 +194,232 @@
 						<p>Returns the menu item specified by the itemkey parameter from the restaurant specified by the key parameter.</p>
 						Example:
 						<div class="api-example align-left">
-							GET /api/restaurant/imAgInETHisIsAVAliDResTauRanTKEy/menu/anoTHerKey
+							GET /api/restaurant/imAgInETHisIsAResTauRanTKEy/menu/aKeY
 							<br />
 							<br />
 							200 OK
 							<br />
-							[ { "name:"Vermin au Cordon Bleu", "price":"59.90", "description":"Splendide! } ]
+							[ { "name":"Vermin au Cordon Bleu", "price":"59.90", "description":"Splendide!" } ]
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="row mar-bot40">
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">PUT /api/restaurant/:key/menu/:itemkey</h4>
+						<p>Replaces the menu specified by the parameter itemkey in the restaurant specified by the parameter key. <b>Requires authentication.</b></p>
+						Example:
+						<div class="api-example align-left">
+							PUT /api/restaurant/imAgInETHisIsAResTauRanTKEy/menu/aKeY
+							<br />
+							[ {"name":"Vermin au Cordon Bleu", "price":"99.90", "desc":"Splendide!"} ]
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "message":"Yay! Success!" } ]
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">DELETE /api/restaurant/:key/menu/:itemkey</h4>
+						<p>Deletes the menu item specified by the itemkey parameter from the restaurant specified by the key parameter. <b>Requires authentication.</b></p>
+						Example:
+						<div class="api-example align-left">
+							DELETE /api/restaurant/imAgInETHisIsAResTauRanTKEy/menu/aKeY
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "message":"Dead." } ]
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row mar-bot40">
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">GET /api/customer</h4>
+						<p>Returns a collection of all the Customers.</p>
+						Example:
+						<div class="api-example align-left">
+							GET /api/customer
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { customer1 }, { customer2 }, ..., { customern } ]
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">POST /api/customer</h4>
+						<p>Creates a new Customer. <b>Requires authentication.</b></p>
+						Example:
+						<div class="api-example align-left">
+							POST /api/customer <br />
+							[ {"name":"Ivan Karamazov", "email": "ivan@vk.ru", "password":"dostoforthewin",
+							"phone": "87-988216875" } ]
+							<br />
+							<br />
+							201 CREATED
+							<br />
+							[ { "message":"Success! You are now one of us, Tobby!" } ]
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mar-bot40">
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">GET /api/customer/:key</h4>
+						<p>Returns the customer specified by the key parameter.</p>
+						Example:
+						<div class="api-example align-left">
+							GET /api/customer/tHiSIsNotAKey
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "key":"tHiSIsNotAKey", ..., "name":"René Magritte" } ]
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">DELETE /api/restaurant/:key</h4>
+						<p>Deletes the customer specified by the key parameter. <b>Requires authentication.</b></p>
+						Example:
+						<div class="api-example align-left">
+							DELETE /api/customer/tHiSIsNotAKey
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "message":"Rest in peace, honey." } ]
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mar-bot40">
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">PATCH /api/customer/:key</h4>
+						<p>Patches the customer specified by the key parameter. <b>Requires authentication. Only <i>replace</i> operations are allowed.</b></p>
+						Example:
+						<div class="api-example align-left">
+							PATCH /api/customer/tHiSIsNotAKey
+							<br />
+							[ {"op":"replace", "path":"/name", "value":"René François Ghislain Magritte"} ]
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "message":"Customer updated successfully!" } ]
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">GET /api/restaurant/:key/order</h4>
+						<p>Returns a collection of all orders of the Restaurant specified by the key parameter.</p>
+						Example:
+						<div class="api-example align-left">
+							GET /api/restaurant/imAgInETHisIsAResTauRanTKEy/order
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { order1 }, { order2 }, ..., { ordern } ]
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mar-bot40">
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">POST /api/restaurant/:key/order</h4>
+						<p>Creates a new order in the Restaurant specified by the key parameter <b>Requires authentication.</b></p>
+						Example:
+						<div class="api-example align-left">
+							POST /api/restaurant/imAgInETHisIsAResTauRanTKEy/order
+							<br />
+							[ {"name":"Cockroach & Peppers", "price":"9.90", "desc":"German cockroaches, rosted peppers and caramelised onions."} ]
+							<br />
+							<br />
+							201 CREATED
+							<br />
+							[ { "message":"Your order has been placed!" } ]
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">GET /api/customer/:key/order</h4>
+						<p>Returns a collection of orders from the Customer specified by the key parameter.</p>
+						Example:
+						<div class="api-example align-left">
+							GET /api/customer/r4nd0mK3Y/order
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "name":"Juan Valdez Coffee", "price":"39.90", "description":"An expert blend of select regional coffees designed to stimulate the senses with intense and pronounced flavors that impact the palate from the first sip." } ]
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mar-bot40">
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">GET /api/restaurant/:key/order/:orderkey</h4>
+						<p>Returns the order specified by the orderkey parameter from the restaurant specified by the key parameter.</p>
+						Example:
+						<div class="api-example align-left">
+							GET /api/restaurant/imAgInETHisIsAResTauRanTKEy/order/1337
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "name":"Vermin au Cordon Bleu", "price":"59.90", "description":"Splendide!" } ]
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-6" >
+					<div class="align-center">
+						<h4 class="text-bold">PATCH /api/restaurant/:key/order/:orderkey</h4>
+						<p>Patches the order specified by the orderkey parameter from the restaurant specified by the key parameter. <b>Requires authentication. Only <i>replace</i> operations are allowed.</b></p>
+						Example:
+						<div class="api-example align-left">
+							PATCH /api/restaurant/imAgInETHisIsAResTauRanTKEy/order/42
+							<br />
+							[ {"op":"replace", "path":"/completed", "value": true} ]
+							<br />
+							<br />
+							200 OK
+							<br />
+							[ { "message":"Order updated successfully" } ]
+						</div>
+					</div>
+				</div>
+			</div>
+
 
 
 
